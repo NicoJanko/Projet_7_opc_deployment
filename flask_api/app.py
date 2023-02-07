@@ -1,16 +1,21 @@
 from http.client import responses
+from sqlite3 import DatabaseError
 from flask import Flask, request, jsonify
 import pickle
 import pandas as pd
 import xgboost as xgb
 import shap
+import psycopg2
+import os
+
 
 app = Flask(__name__)
 
 threshold = 0.365
 #need to load the model, the explainer and the data to the api
 model = pickle.load(open('pipeline.pkl', 'rb'))
-data = pickle.load(open('full_data_prepro.pkl', 'rb'))
+DATABASE_URL = os.environ('DATABASE_URL')
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 #explainer = pickle.load(open('explainer.pkl', 'rb'))
 
 @app.route('/')
