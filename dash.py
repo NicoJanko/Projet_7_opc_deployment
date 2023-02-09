@@ -1,8 +1,9 @@
 import pandas as pd
 import streamlit as st
 import requests
+import os
 
-waitress_port = $PORT
+waitress_port = os.environ['PORT']
 
 def make_pred(api_uri, client_id):
     headers = {"Content-Type": "application/json"}
