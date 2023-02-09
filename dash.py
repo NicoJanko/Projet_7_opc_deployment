@@ -27,8 +27,8 @@ def main():
     if test_btn:
         st.header('Is good ? :')
         response = requests.get(api_uri+'/test', json={'client_id': 42})
-        response = response.json()
-        st.header(response['test'])
+
+        st.header(str(response))
     predict_btn = st.button('Prédire')
     if predict_btn:
         st.header('Identifiant : {}'.format(client_selector))
