@@ -14,7 +14,7 @@ app = Flask(__name__)
 threshold = 0.365
 #need to load the model, the explainer and the data to the api
 model = pickle.load(open('pipeline.pkl', 'rb'))
-DATABASE_URL = os.environ('DATABASE_URL')
+DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 #explainer = pickle.load(open('explainer.pkl', 'rb'))
 
