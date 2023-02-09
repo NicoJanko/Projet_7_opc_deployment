@@ -14,7 +14,7 @@ def make_pred(api_uri, client_id):
     return response.json()
     
 def main():
-    api_uri = 'http://0.0.0.0:' + waitress_port
+    api_uri = 'http://pad-app.herokuapp.com/api'
     st.title('Prêt à dépenser')
     
     client_selector = st.sidebar.number_input("Identifiant client",
