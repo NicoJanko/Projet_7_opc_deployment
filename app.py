@@ -27,7 +27,7 @@ def index():
 def test():
     response = request.get_json()
     client_id = response['client_id']
-    test = {'test':'OK! id :'+client_id}
+    test = {'test':'OK! id : {}'.format(client_id)}
     return jsonify(test)
 
 def get_data(ID):
