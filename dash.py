@@ -27,7 +27,7 @@ def main():
     test_btn = st.button('Test')
     if test_btn:
         st.header('Is good ? :')
-        response = requests.get(api_uri+'/test')).json()
+        response = requests.get(api_uri+'/test').json()
         st.header(response['test'])
     predict_btn = st.button('Prédire')
     if predict_btn:
