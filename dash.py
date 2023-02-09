@@ -23,7 +23,11 @@ def main():
                                               
                                              )
    
-    
+    test_btn = st.button('Test')
+    if test_btn:
+        st.header('Is good ? :')
+        response = json(requests.get(api_uri+'/test'))
+        st.header(response['test'])
     predict_btn = st.button('Prédire')
     if predict_btn:
         st.header('Identifiant : {}'.format(client_selector))

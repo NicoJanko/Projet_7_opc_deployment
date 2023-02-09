@@ -23,6 +23,11 @@ def index():
     routes = ['/predict', '/explain']
     return '---Pret a depenser API.---'
 
+@app.route('/test')
+def test():
+    test = {'test':'OK!'}
+    return jsonify(test)
+
 def get_data(ID):
     client_data = data[data.index==int(ID)]
     if client_data.shape[0] != 0:
