@@ -1,3 +1,5 @@
 full_data_prepro.pkl
 full_data_prepro.csv
+client_db5.dump
+.env
 .vs
