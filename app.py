@@ -25,7 +25,9 @@ def index():
 
 @app.route('/test')
 def test():
-    test = {'test':'OK!'}
+    response = request.get_json()
+    client_id = response['client_id']
+    test = {'test':'OK! id :'+client_id}
     return jsonify(test)
 
 def get_data(ID):

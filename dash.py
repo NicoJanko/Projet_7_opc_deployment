@@ -6,7 +6,6 @@ import os
 waitress_port = os.environ['PORT']
 
 def make_pred(api_uri, client_id):
-    headers = {"Content-Type": "application/json"}
     response = requests.get(api_uri+'/predict', json={'client_id' : client_id}
                                )
     if response.status_code != 200:
@@ -27,7 +26,8 @@ def main():
     test_btn = st.button('Test')
     if test_btn:
         st.header('Is good ? :')
-        response = requests.get(api_uri+'/test').json()
+        response = requests.get(api_uri+'/test', json={'client_id', client_selector})
+        response = response.json()
         st.header(response['test'])
     predict_btn = st.button('Prédire')
     if predict_btn:
