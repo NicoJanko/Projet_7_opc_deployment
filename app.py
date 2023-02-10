@@ -31,21 +31,28 @@ def test():
     return jsonify(test)
 
 def get_data(ID):
-    client_data = data[data.index==int(ID)]
+    cur = conn.cursor()
+    #get data from postgresql db
+    cur.execute('SELECT * FROM client WHERE "SK_ID_CURR" = '+str(ID))
+    client_data = cur.fetchall()
+    #get colnames
+    cur.execute('SELECT * FROM client')
+    col_names = [desc[0] for desc in cur.description]
     if client_data.shape[0] != 0:
-        return client_data
+        return client_data, col_names
 
 @app.route('/predict', methods=['GET'])
 def predict():
     #retrive the id from the request and pull it's data
     client_id = request.get_json()
     client_id = client_id['client_id']
-    client_data = get_data(client_id)
+    client_data, col_names = get_data(client_id)
 
     if client_data is None:
         response = 'Client inconnu'
     else:
         #make prediction and probability
+        client_data = pd.DataFrame(client_data, columns=col_names).set_index('SK_ID_CURR')
         proba = model.predict_proba(client_data)
         if proba[0,1] > threshold:
             pred = 1

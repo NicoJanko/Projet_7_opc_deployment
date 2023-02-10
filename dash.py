@@ -1,9 +1,8 @@
 import pandas as pd
 import streamlit as st
 import requests
-import os
 
-waitress_port = os.environ['PORT']
+
 
 def make_pred(api_uri, client_id):
     response = requests.get(api_uri+'/predict', json={'client_id' : client_id}
@@ -14,7 +13,7 @@ def make_pred(api_uri, client_id):
     return response.json()
     
 def main():
-    api_uri = 'http://0.0.0.0:'+str(waitress_port)
+    api_uri = 'http://pad-app.herokuapp.com'
     st.title('Prêt à dépenser')
     st.header(api_uri)
     
