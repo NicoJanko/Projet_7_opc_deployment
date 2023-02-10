@@ -16,6 +16,7 @@ def make_pred(api_uri, client_id):
 def main():
     api_uri = 'http://0.0.0.0:'+str(waitress_port)
     st.title('Prêt à dépenser')
+    st.header(api_uri)
     
     client_selector = st.sidebar.number_input("Identifiant client",
                                               min_value = 100001,
