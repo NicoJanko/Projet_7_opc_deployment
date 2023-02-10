@@ -14,7 +14,7 @@ def make_pred(api_uri, client_id):
     return response.json()
     
 def main():
-    api_uri = 'http://pad-app.herokuapp.com/api'
+    api_uri = 'http://0.0.0.0:'+str(waitress_port)
     st.title('Prêt à dépenser')
     
     client_selector = st.sidebar.number_input("Identifiant client",
@@ -29,7 +29,7 @@ def main():
         response = requests.get(api_uri+'/test', json={'client_id': 42})
 
         st.header(str(response.status_code))
-        st.header(str(response.text))
+        st.header(str(response.json()['test'])
     predict_btn = st.button('Prédire')
     if predict_btn:
         st.header('Identifiant : {}'.format(client_selector))
