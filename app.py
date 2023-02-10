@@ -36,7 +36,6 @@ def get_data(ID):
     cur.execute('SELECT * FROM client WHERE "SK_ID_CURR" = '+str(ID))
     client_data = cur.fetchall()
     #get colnames
-    cur.execute('SELECT * FROM client')
     col_names = [desc[0] for desc in cur.description]
     if client_data.shape[0] != 0:
         return client_data, col_names
