@@ -29,7 +29,7 @@ def main():
         response = requests.get(api_uri+'/test', json={'client_id': 42})
 
         st.header(str(response.status_code))
-        st.header(str(response.json()['test'])
+        st.header(str(response.json()['test']))
     predict_btn = st.button('Prédire')
     if predict_btn:
         st.header('Identifiant : {}'.format(client_selector))
