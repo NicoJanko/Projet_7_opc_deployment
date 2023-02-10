@@ -10,7 +10,7 @@ import os
 
 
 app = Flask(__name__)
-print(request.base_url)
+
 threshold = 0.365
 #need to load the model, the explainer and the data to the api
 model = pickle.load(open('pipeline.pkl', 'rb'))
@@ -27,7 +27,7 @@ def index():
 def test():
     response = request.get_json()
     client_id = response['client_id']
-    test = {'test':'OK! id : {}'.format(client_id)}
+    test = {'test':'OK! id : {}'.format(request.base_url))}
     return jsonify(test)
 
 def get_data(ID):
