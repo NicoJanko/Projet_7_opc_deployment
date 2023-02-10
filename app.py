@@ -52,6 +52,7 @@ def predict():
     else:
         #make prediction and probability
         client_data = pd.DataFrame(client_data, columns=col_names).set_index('SK_ID_CURR')
+        client_data = client_data.drop(labels='index', axis=1)
         proba = model.predict_proba(client_data)
         if proba[0,1] > threshold:
             pred = 1
