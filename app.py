@@ -37,7 +37,7 @@ def get_data(ID):
     client_data = cur.fetchall()
     #get colnames
     col_names = [desc[0] for desc in cur.description]
-    if client_data.shape[0] != 0:
+    if len(client_data) != 0:
         return client_data, col_names
 
 @app.route('/predict', methods=['GET'])
