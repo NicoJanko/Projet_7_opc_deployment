@@ -62,7 +62,8 @@ def predict():
                 'data' : client_data.to_dict(),
                 'prediction' : pred,
                 'probability' : int(round(proba[0,1],2)*100),
-                'shap_values' : shap_values,}
+                'shap_values' : shap_values,
+                'expected_val' : explainer.expected_value,}
     return jsonify(response)
 
 #def explain():
