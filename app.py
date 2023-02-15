@@ -16,7 +16,7 @@ threshold = 0.365
 model = pickle.load(open('pipeline.pkl', 'rb'))
 DATABASE_URL = os.environ['DATABASE_URL']
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-#explainer = pickle.load(open('explainer.pkl', 'rb'))
+explainer = pickle.load(open('explainer.pkl', 'rb'))
 
 @app.route('/')
 def index():
@@ -54,13 +54,15 @@ def predict():
         client_data = pd.DataFrame(client_data, columns=col_names).set_index('SK_ID_CURR')
         client_data = client_data.drop(labels='index', axis=1)
         proba = model.predict_proba(client_data)
+        shap_values = explainer.shap_values(client_data)
         if proba[0,1] > threshold:
             pred = 1
         else: pred = 0
         response = {'id' : client_id,
                 'data' : client_data.to_dict(),
                 'prediction' : pred,
-                'probability' : int(round(proba[0,1],2)*100)}
+                'probability' : int(round(proba[0,1],2)*100),
+                'shap_values' : shap_values,}
     return jsonify(response)
 
 #def explain():
