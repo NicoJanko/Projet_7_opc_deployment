@@ -29,6 +29,7 @@ def index():
     routes = ['/predict', '/explain']
     return '---Pret a depenser API.---'
 
+#test connection with database
 @app.route('/test')
 def test():
     response = request.get_json()
@@ -49,7 +50,7 @@ def test():
 
 
 #calculate shap values for the summary plot
-def get_rand(n = 5000):
+def get_rand(n = 1000):
     cur = conn.cursor()
     cur.execute(f'SELECT * FROM client ORDER BY RANDOM() LIMIT {n}')
     rand = cur.fetchall()
@@ -67,6 +68,7 @@ def summary():
         }
     return jsonify(response)
 
+#retreve data from database and predict
 def get_data(ID):
     cur = conn.cursor()
     #get data from postgresql db
@@ -104,16 +106,26 @@ def predict():
                 }
     return jsonify(response)
 
+#retreave the un-preprocess data and send the all database values
+def get_raw(ID, feat_name):
+    cur = conn2.cursor()
+    cur.execute(f'SELECT "{feat_name}" FROM full_data WHERE "SK_ID_CURR" = {ID}')
+    raw_data = cur.fetchall()
+    col_names = [desc[0] for desc in cur.description]
+    raw_data = pd.DataFrame(raw_data, columns=col_names)
+    cur.execute(f'SELECT "{feat_name}" FROM full_data')
+    col_values = cur.fetchall()
+    col_values = pd.DataFrame(col_values, columns=col_names)
+    return raw_data, col_values
+
 @app.route('/feat')
 def feat():
     response = request.get_json()
     client_id = response['id']
     feat_name = response['feat']
-    cur = conn2.cursor()
-    cur.execute(f'SELECT "{feat_name}" FROM full_data WHERE "SK_ID_CURR" = {client_id}')
-    raw_data = cur.fetchall()
-    col_names = [desc[0] for desc in cur.description]
-    raw_data = pd.DataFrame(raw_data, columns=col_names)
-    response = {'raw_data' : raw_data.to_dict()}
+    raw_data, col_values = get_raw(client_id, feat_name)
+    response = {'raw_data' : raw_data.to_dict(),
+                'col_values' : col_values.to_dict(),
+                }
     return jsonify(response)
     
