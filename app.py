@@ -21,18 +21,7 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 conn2 = psycopg2.connect(BRONZE_DATABASE_URL, sslmode='require')
 explainer = pickle.load(open('explainer.pkl', 'rb'))
 
-#calculate shap values for the summary plot
-def get_rand(n = 5000):
-    cur = conn.cursor()
-    cur.execute(f'SELECT * FROM client ORDER BY RANDOM() LIMIT {n}')
-    rand = cur.fetchall()
-    col_names = [desc[0] for desc in cur.description]
-    rand = pd.DataFrame(rand, columns=col_names).set_index('SK_ID_CURR')
-    rand = rand.drop(labels='index', axis=1)
-    return rand
 
-rand = get_rand()
-rand_sv = explainer.shap_values(rand)
 
 
 @app.route('/')
@@ -59,7 +48,24 @@ def test():
     return jsonify(return_test)
 
 
+#calculate shap values for the summary plot
+def get_rand(n = 5000):
+    cur = conn.cursor()
+    cur.execute(f'SELECT * FROM client ORDER BY RANDOM() LIMIT {n}')
+    rand = cur.fetchall()
+    col_names = [desc[0] for desc in cur.description]
+    rand = pd.DataFrame(rand, columns=col_names).set_index('SK_ID_CURR')
+    rand = rand.drop(labels='index', axis=1)
+    return rand
 
+@app.route('/summary', methods=['GET'])
+def summary():
+    rand = get_rand()
+    rand_sv = explainer.shap_values(rand)
+    response = {'rand_sv' : rand_sv.tolist(),
+                'rand_data' : rand.to_dict(),
+        }
+    return jsonify(response)
 
 def get_data(ID):
     cur = conn.cursor()
@@ -95,8 +101,6 @@ def predict():
                 'probability' : int(round(proba[0,1],2)*100),
                 'shap_values' : shap_values.tolist(),
                 'expected_val' : explainer.expected_value,
-                'rand_sv' : rand_sv.tolist(),
-                'rand_data' : rand.to_dict(),
                 }
     return jsonify(response)
 
