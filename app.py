@@ -94,7 +94,9 @@ def predict():
                 'prediction' : pred,
                 'probability' : int(round(proba[0,1],2)*100),
                 'shap_values' : shap_values.tolist(),
-                'expected_val' : explainer.expected_value,}
+                'expected_val' : explainer.expected_value,
+                'rand_sv' : rand_sv,
+                }
     return jsonify(response)
 
 @app.route('/feat')
