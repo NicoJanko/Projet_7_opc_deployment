@@ -89,7 +89,7 @@ def feat():
     client_id = response['id']
     feat_name = response['feat']
     cur = conn2.cursor()
-    cur.execute(f'SELECT {feat_name} FROM full_data WHERE "SK_ID_CURR" = {client_id}')
+    cur.execute(f'SELECT "{feat_name}" FROM full_data WHERE "SK_ID_CURR" = {client_id}')
     raw_data = cur.fetchall()
     col_names = [desc[0] for desc in cur.description]
     raw_data = pd.DataFrame(raw_data, columns=col_names).set_index('SK_ID_CURR')
