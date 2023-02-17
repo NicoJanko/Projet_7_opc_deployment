@@ -21,6 +21,20 @@ conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 conn2 = psycopg2.connect(BRONZE_DATABASE_URL, sslmode='require')
 explainer = pickle.load(open('explainer.pkl', 'rb'))
 
+#calculate shap values for the summary plot
+def get_rand(n = 100):
+    cur = conn.cursor()
+    cur.execute(f'SELECT * FROM client ORDER BY RANDOM() LIMIT {n}')
+    rand = cur.fetchall()
+    col_names = [desc[0] for desc in cur.description]
+    rand = pd.DataFrame(rand, columns=col_names).set_index('SK_ID_CURR')
+    rand = rand.drop(labels='index', axis=1)
+    return rand
+
+rand = get_rand()
+rand_sv = explainer.shap_values(rand)
+
+
 @app.route('/')
 def index():
     routes = ['/predict', '/explain']
