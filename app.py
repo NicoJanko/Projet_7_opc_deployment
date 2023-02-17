@@ -30,7 +30,7 @@ def index():
 def test():
     response = request.get_json()
     test = response['test']
-    if test !=42:
+    if test != '42':
         #check the primary db
         cur = conn.cursor()
         cur.execute('SELECT "AMT_CREDIT" FROM client WHERE "SK_ID_CURR"=100001')
@@ -41,7 +41,7 @@ def test():
         raw_db = cur2.fetchall()
 
         return_test = {'Status' : 'OK', 'client_db': client_db, 'raw_data' : raw_db}
-    else: return_test = {'Status' : 'Error with request'}
+    else: return_test = {f'Status' : 'Error with request, got : {test}'}
     return jsonify(return_test)
 
 
