@@ -22,7 +22,7 @@ conn2 = psycopg2.connect(BRONZE_DATABASE_URL, sslmode='require')
 explainer = pickle.load(open('explainer.pkl', 'rb'))
 
 #calculate shap values for the summary plot
-def get_rand(n = 10000):
+def get_rand(n = 5000):
     cur = conn.cursor()
     cur.execute(f'SELECT * FROM client ORDER BY RANDOM() LIMIT {n}')
     rand = cur.fetchall()
