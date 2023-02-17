@@ -96,6 +96,7 @@ def predict():
                 'shap_values' : shap_values.tolist(),
                 'expected_val' : explainer.expected_value,
                 'rand_sv' : rand_sv.tolist(),
+                'rand_data' : rand.to_dict(),
                 }
     return jsonify(response)
 
