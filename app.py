@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 
-threshold = 0.365
+threshold = 0.4431
 #need to load the model, the explainer and the data to the api
 model = pickle.load(open('pipeline.pkl', 'rb'))
 DATABASE_URL = os.environ['DATABASE_URL']
@@ -34,7 +34,7 @@ def index():
 def test():
     response = request.get_json()
     test = response['test']
-    if test != '42':
+    if test == 100001:
         #check the primary db
         cur = conn.cursor()
         cur.execute('SELECT "AMT_CREDIT" FROM client WHERE "SK_ID_CURR"=100001')
@@ -43,6 +43,8 @@ def test():
         cur2 = conn2.cursor()
         cur2.execute('SELECT "CODE_GENDER" FROM full_data WHERE "SK_ID_CURR"=100001')
         raw_db = cur2.fetchall()
+        #check the pipeline
+
 
         return_test = {'Status' : 'OK', 'client_db': client_db, 'raw_data' : raw_db}
     else: return_test = {f'Status' : 'Error with request, got : {test}'}
